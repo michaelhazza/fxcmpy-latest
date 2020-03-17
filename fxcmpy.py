@@ -1106,14 +1106,13 @@ class fxcmpy(object):
                   'at_market': at_market,
                   'order_type': order_type,
                   'time_in_force': time_in_force,
-                  'limit': limit,
                   'is_in_pips': is_in_pips
                  }
 
-        if limit is not None:
-            params['limit'] = limit
         if stop is not None:
             params['stop'] = stop
+        if limit is not None:
+            params['limit'] = limit
         if trailing_step is not None:
             params['trailing_step'] = trailing_step
 
@@ -1456,7 +1455,7 @@ class fxcmpy(object):
         return order
 
     def create_entry_order(self, symbol, is_buy, amount, time_in_force,
-                           order_type="Entry", limit=0, is_in_pips=True,
+                           order_type="Entry", limit=None, is_in_pips=True,
                            rate=0, stop=None, trailing_step=None, 
                            trailing_stop_step=None, order_range=None, 
                            expiration=None,
@@ -1536,11 +1535,6 @@ class fxcmpy(object):
         except:
             raise TypeError('rate must be a number.')
 
-        try:
-            limit = float(limit)
-        except:
-            raise TypeError('limit must be a number.')
-
         if order_type not in ['Entry', 'RangeEntry']:
             msg = "order_type must be 'Entry' or 'RangeEntry'."
             raise ValueError(msg)
@@ -1568,6 +1562,12 @@ class fxcmpy(object):
                 stop = float(stop)
             except:
                 raise TypeError('stop must be a number.')
+                
+        if limit is not None:
+            try:
+                limit = float(limit)
+            except:
+                raise TypeError('limit must be a number.')
 
         if trailing_step is not None:
             try:
@@ -1617,7 +1617,6 @@ class fxcmpy(object):
                   'is_buy': is_buy,
                   'rate': rate,
                   'amount': amount,
-                  'limit': limit,
                   'order_type': order_type,
                   'is_in_pips': is_in_pips,
                   'time_in_force': time_in_force
@@ -1625,6 +1624,8 @@ class fxcmpy(object):
 
         if stop is not None:
             params['stop'] = stop
+        if limit is not None:
+            params['limit'] = limit
         if trailing_step is not None:
             params['trailing_step'] = trailing_step
         if trailing_stop_step is not None:
